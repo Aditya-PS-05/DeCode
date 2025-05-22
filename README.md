@@ -1,6 +1,3 @@
-### client side code
-https://github.com/Aditya-PS-05/De-Code-client
-
 ### steps to run the repository
 `step-1`: Clone the two repositories in a folder 
 
