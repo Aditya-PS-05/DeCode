@@ -3,7 +3,6 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -22,5 +21,53 @@ model User {
   oauth_id   String
   created_at DateTime    @default(now())
 
+  submissions Submission[]
+  solvedProblems SolvedProblem[]
+
   @@map("users")
+}
+
+model Problem {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(255)
+  description String
+  difficulty  String     @db.VarChar(50)
+  tags        String[]   @db.VarChar(100)
+  constraints String[]
+  examples    Json       // Stored as JSON
+  created_at  DateTime   @default(now())
+
+  submissions Submission[]
+  solvedBy    SolvedProblem[]
+
+  @@map("problems")
+}
+
+model Submission {
+  id         Int       @id @default(autoincrement())
+  code       String
+  language   String    @db.VarChar(50)
+  result     String    @db.VarChar(50)
+  created_at DateTime  @default(now())
+
+  user_id    Int
+  problem_id Int
+
+  user       User      @relation(fields: [user_id], references: [id])
+  problem    Problem   @relation(fields: [problem_id], references: [id])
+
+  @@map("submissions")
+}
+
+model SolvedProblem {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  problem_id Int
+  solved_at  DateTime  @default(now())
+
+  user       User      @relation(fields: [user_id], references: [id])
+  problem    Problem   @relation(fields: [problem_id], references: [id])
+
+  @@unique([user_id, problem_id])
+  @@map("solved_problems")
 }
