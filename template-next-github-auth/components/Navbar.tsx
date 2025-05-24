@@ -5,9 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import LoginModal from './auth/LoginModel';
 import { usePathname } from 'next/navigation';
-// import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = ({ user }: { user: CustomSession['user'] }) => {
   const location = usePathname();
@@ -48,7 +46,7 @@ const Navbar = ({ user }: { user: CustomSession['user'] }) => {
             </div>
           </div>
 
-          {!user ? <LoginModal /> : <div className="flex items-center space-x-4">
+          {!user ? <Link href="/auth">SignUp</Link> : <div className="flex items-center space-x-4">
             <Badge variant="secondary" className="hidden sm:flex">
               <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
               12 problems solved
@@ -80,7 +78,7 @@ const Navbar = ({ user }: { user: CustomSession['user'] }) => {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard">Profile</Link>
+                  <Link href="/profile">Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/submissions">My Submissions</Link>
