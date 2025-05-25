@@ -48,36 +48,36 @@ const Submissions = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Accepted':
-        return 'text-green-600 bg-green-50 border-green-200';
+        return 'text-green-400 bg-green-950 border-green-800';
       case 'Wrong Answer':
-        return 'text-red-600 bg-red-50 border-red-200';
+        return 'text-red-400 bg-red-950 border-red-800';
       case 'Time Limit Exceeded':
-        return 'text-orange-600 bg-orange-50 border-orange-200';
+        return 'text-orange-400 bg-orange-950 border-orange-800';
       case 'Runtime Error':
-        return 'text-purple-600 bg-purple-50 border-purple-200';
+        return 'text-purple-400 bg-purple-950 border-purple-800';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-gray-400 bg-gray-800 border-gray-700';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Submissions</h1>
-          <p className="text-gray-600">Track your progress and review your solutions</p>
+          <h1 className="text-3xl font-bold text-white mb-2">My Submissions</h1>
+          <p className="text-gray-400">Track your progress and review your solutions</p>
         </div>
 
         <div className="space-y-4">
           {mockSubmissions.map((submission) => (
-            <Card key={submission.id} className="hover:shadow-md transition-shadow">
+            <Card key={submission.id} className="hover:shadow-lg transition-shadow bg-gray-800 border-gray-700">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-4 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3 className="text-lg font-semibold text-white">
                         {submission.problemTitle}
                       </h3>
                       <Badge className={`border ${getStatusColor(submission.status)}`} variant="outline">
@@ -85,8 +85,8 @@ const Submissions = () => {
                       </Badge>
                     </div>
                     
-                    <div className="flex items-center gap-6 text-sm text-gray-600">
-                      <span>{submission.language}</span>
+                    <div className="flex items-center gap-6 text-sm text-gray-400">
+                      <span className="text-gray-300">{submission.language}</span>
                       {submission.status === 'Accepted' && (
                         <>
                           <span>Runtime: {submission.runtime}</span>
@@ -97,7 +97,7 @@ const Submissions = () => {
                     </div>
                   </div>
                   
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white">
                     View Code
                   </Button>
                 </div>
@@ -108,13 +108,13 @@ const Submissions = () => {
 
         {mockSubmissions.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6-4h6m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No submissions yet</h3>
-            <p className="text-gray-600">Start solving problems to see your submissions here</p>
+            <h3 className="text-lg font-medium text-white mb-2">No submissions yet</h3>
+            <p className="text-gray-400">Start solving problems to see your submissions here</p>
           </div>
         )}
       </div>

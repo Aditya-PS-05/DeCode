@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { Link, useLocation } from 'react-router-dom';
+import Logo from './Logo';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -18,14 +19,8 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold text-gray-900">CodeSolve</span>
+              <Logo />
             </Link>
-
             <div className="hidden md:flex items-center space-x-6">
               <Link
                 to="/"
@@ -45,13 +40,11 @@ const Navbar = () => {
               </Link>
             </div>
           </div>
-
           <div className="flex items-center space-x-4">
             <Badge variant="secondary" className="hidden sm:flex">
               <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
               12 problems solved
             </Badge>
-
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">

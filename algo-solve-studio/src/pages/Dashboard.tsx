@@ -91,26 +91,26 @@ const Dashboard = () => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Easy':
-        return 'text-green-600 bg-green-50 border-green-200';
+        return 'text-green-400 bg-green-950 border-green-800';
       case 'Medium':
-        return 'text-orange-600 bg-orange-50 border-orange-200';
+        return 'text-orange-400 bg-orange-950 border-orange-800';
       case 'Hard':
-        return 'text-red-600 bg-red-50 border-red-200';
+        return 'text-red-400 bg-red-950 border-red-800';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-gray-400 bg-gray-800 border-gray-700';
     }
   };
 
   const allTags = Array.from(new Set(mockProblems.flatMap(p => p.tags)));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Problems</h1>
-          <p className="text-gray-600">Sharpen your coding skills with our curated collection of problems</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Problems</h1>
+          <p className="text-gray-400">Sharpen your coding skills with our curated collection of problems</p>
         </div>
 
         <div className="mb-6 flex flex-col sm:flex-row gap-4">
@@ -119,15 +119,15 @@ const Dashboard = () => {
               placeholder="Search problems..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-10"
+              className="h-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
           <div className="flex gap-2">
             <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-              <SelectTrigger className="w-32">
+              <SelectTrigger className="w-32 bg-gray-800 border-gray-700 text-white">
                 <SelectValue placeholder="Difficulty" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-800 border-gray-700">
                 <SelectItem value="all">All</SelectItem>
                 <SelectItem value="Easy">Easy</SelectItem>
                 <SelectItem value="Medium">Medium</SelectItem>
@@ -135,10 +135,10 @@ const Dashboard = () => {
               </SelectContent>
             </Select>
             <Select value={tagFilter} onValueChange={setTagFilter}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-40 bg-gray-800 border-gray-700 text-white">
                 <SelectValue placeholder="Topic" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-800 border-gray-700">
                 <SelectItem value="all">All Topics</SelectItem>
                 {allTags.map(tag => (
                   <SelectItem key={tag} value={tag}>{tag}</SelectItem>
@@ -150,12 +150,12 @@ const Dashboard = () => {
 
         <div className="grid gap-4">
           {filteredProblems.map((problem) => (
-            <Card key={problem.id} className="hover:shadow-md transition-shadow border-l-4 border-l-blue-500">
+            <Card key={problem.id} className="hover:shadow-lg transition-shadow border-l-4 border-l-green-500 bg-gray-800 border-gray-700">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      <h3 className="text-lg font-semibold text-white truncate">
                         {problem.title}
                       </h3>
                       {problem.solved && (
@@ -167,7 +167,7 @@ const Dashboard = () => {
                       )}
                     </div>
                     
-                    <p className="text-gray-600 mb-4 line-clamp-2">{problem.description}</p>
+                    <p className="text-gray-300 mb-4 line-clamp-2">{problem.description}</p>
                     
                     <div className="flex items-center gap-4">
                       <Badge className={`border ${getDifficultyColor(problem.difficulty)}`} variant="outline">
@@ -176,25 +176,25 @@ const Dashboard = () => {
                       
                       <div className="flex gap-1 flex-wrap">
                         {problem.tags.slice(0, 3).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
+                          <Badge key={tag} variant="secondary" className="text-xs bg-gray-700 text-gray-300 border-gray-600">
                             {tag}
                           </Badge>
                         ))}
                         {problem.tags.length > 3 && (
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-xs bg-gray-700 text-gray-300 border-gray-600">
                             +{problem.tags.length - 3}
                           </Badge>
                         )}
                       </div>
                       
-                      <div className="text-sm text-gray-500 ml-auto hidden sm:block">
+                      <div className="text-sm text-gray-400 ml-auto hidden sm:block">
                         {problem.acceptance} accepted
                       </div>
                     </div>
                   </div>
                   
                   <div className="ml-6 flex-shrink-0">
-                    <Button asChild>
+                    <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
                       <Link to={`/problem/${problem.id}`}>
                         {problem.solved ? 'Review' : 'Solve'}
                       </Link>
@@ -208,13 +208,13 @@ const Dashboard = () => {
 
         {filteredProblems.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.058 0-3.9.78-5.291 2.062M6.343 6.343A8 8 0 1017.657 17.657 8 8 0 006.343 6.343z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No problems found</h3>
-            <p className="text-gray-600">Try adjusting your search criteria</p>
+            <h3 className="text-lg font-medium text-white mb-2">No problems found</h3>
+            <p className="text-gray-400">Try adjusting your search criteria</p>
           </div>
         )}
       </div>

@@ -1,8 +1,10 @@
+// components/ProblemsClient.tsx
 "use client";
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Navbar from '@/components/Navbar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -11,83 +13,41 @@ import Link from 'next/link';
 import { CustomSession } from '@/app/api/auth/[...nextauth]/options';
 
 interface Problem {
-  id: string;
+  id: number;
   title: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
   tags: string[];
   description: string;
-  acceptance: string;
-  solved: boolean;
+  acceptance?: string;
+  solved?: boolean;
 }
 
-const mockProblems: Problem[] = [
-  {
-    id: '1',
-    title: 'Two Sum',
-    difficulty: 'Easy',
-    tags: ['Array', 'Hash Table'],
-    description: 'Given an array of integers, return indices of the two numbers such that they add up to a specific target.',
-    acceptance: '49.1%',
-    solved: true
-  },
-  {
-    id: '2',
-    title: 'Add Two Numbers',
-    difficulty: 'Medium',
-    tags: ['Linked List', 'Math'],
-    description: 'You are given two non-empty linked lists representing two non-negative integers.',
-    acceptance: '34.2%',
-    solved: false
-  },
-  {
-    id: '3',
-    title: 'Longest Substring Without Repeating Characters',
-    difficulty: 'Medium',
-    tags: ['Hash Table', 'String', 'Sliding Window'],
-    description: 'Given a string, find the length of the longest substring without repeating characters.',
-    acceptance: '31.7%',
-    solved: false
-  },
-  {
-    id: '4',
-    title: 'Median of Two Sorted Arrays',
-    difficulty: 'Hard',
-    tags: ['Array', 'Binary Search', 'Divide and Conquer'],
-    description: 'Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.',
-    acceptance: '33.8%',
-    solved: false
-  },
-  {
-    id: '5',
-    title: 'Longest Palindromic Substring',
-    difficulty: 'Medium',
-    tags: ['String', 'Dynamic Programming'],
-    description: 'Given a string s, return the longest palindromic substring in s.',
-    acceptance: '30.5%',
-    solved: true
-  },
-  {
-    id: '6',
-    title: 'ZigZag Conversion',
-    difficulty: 'Medium',
-    tags: ['String'],
-    description: 'The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows.',
-    acceptance: '39.8%',
-    solved: false
-  }
-];
-
-const ProblemsPage = () => {
+const ProblemsClient = () => {
   const { data: session } = useSession() as { data: CustomSession | null };
+  const [problems, setProblems] = useState<Problem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
   const [tagFilter, setTagFilter] = useState('all');
 
-  const filteredProblems = mockProblems.filter(problem => {
+  useEffect(() => {
+    const fetchProblems = async () => {
+      try {
+        const res = await fetch("/api/problems");
+        const data = await res.json();
+        setProblems(data.problems);
+        console.log("The data is: ", data);
+      } catch (error) {
+        console.error("Failed to fetch problems", error);
+      }
+    };
+
+    fetchProblems();
+  }, []);
+
+  const filteredProblems = problems.filter(problem => {
     const matchesSearch = problem.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDifficulty = difficultyFilter === 'all' || problem.difficulty === difficultyFilter;
     const matchesTag = tagFilter === 'all' || problem.tags.some(tag => tag === tagFilter);
-        
     return matchesSearch && matchesDifficulty && matchesTag;
   });
 
@@ -104,12 +64,12 @@ const ProblemsPage = () => {
     }
   };
 
-  const allTags = Array.from(new Set(mockProblems.flatMap(p => p.tags)));
+  const allTags = Array.from(new Set(problems.flatMap(p => p.tags)));
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar user={session?.user} />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Problems</h1>
@@ -117,38 +77,34 @@ const ProblemsPage = () => {
         </div>
 
         <div className="mb-6 flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <Input
-              placeholder="Search problems..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-10"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-              <SelectTrigger className="w-32">
-                <SelectValue placeholder="Difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="Easy">Easy</SelectItem>
-                <SelectItem value="Medium">Medium</SelectItem>
-                <SelectItem value="Hard">Hard</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={tagFilter} onValueChange={setTagFilter}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Topic" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Topics</SelectItem>
-                {allTags.map(tag => (
-                  <SelectItem key={tag} value={tag}>{tag}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <Input
+            placeholder="Search problems..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="h-10"
+          />
+          <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Difficulty" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="Easy">Easy</SelectItem>
+              <SelectItem value="Medium">Medium</SelectItem>
+              <SelectItem value="Hard">Hard</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={tagFilter} onValueChange={setTagFilter}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Topic" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Topics</SelectItem>
+              {allTags.map(tag => (
+                <SelectItem key={tag} value={tag}>{tag}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="grid gap-4">
@@ -158,9 +114,7 @@ const ProblemsPage = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
-                        {problem.title}
-                      </h3>
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">{problem.title}</h3>
                       {problem.solved && (
                         <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
                           <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,14 +123,11 @@ const ProblemsPage = () => {
                         </div>
                       )}
                     </div>
-                    
                     <p className="text-gray-600 mb-4 line-clamp-2">{problem.description}</p>
-                    
                     <div className="flex items-center gap-4">
                       <Badge className={`border ${getDifficultyColor(problem.difficulty)}`} variant="outline">
                         {problem.difficulty}
                       </Badge>
-                      
                       <div className="flex gap-1 flex-wrap">
                         {problem.tags.slice(0, 3).map((tag) => (
                           <Badge key={tag} variant="secondary" className="text-xs">
@@ -189,16 +140,14 @@ const ProblemsPage = () => {
                           </Badge>
                         )}
                       </div>
-                      
                       <div className="text-sm text-gray-500 ml-auto hidden sm:block">
-                        {problem.acceptance} accepted
+                        {problem.acceptance ?? 'N/A'} accepted
                       </div>
                     </div>
                   </div>
-                  
                   <div className="ml-6 flex-shrink-0">
                     <Button asChild>
-                      <Link href={`/problems/1`}>
+                      <Link href={`/problems/${problem.id}`}>
                         {problem.solved ? 'Review' : 'Solve'}
                       </Link>
                     </Button>
@@ -225,4 +174,4 @@ const ProblemsPage = () => {
   );
 };
 
-export default ProblemsPage;
+export default ProblemsClient;

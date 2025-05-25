@@ -45,3 +45,21 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  try {
+    const problems = await prisma.problem.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+
+    return NextResponse.json({ problems });
+  } catch (error) {
+    console.error("Error fetching problems:", error);
+    return NextResponse.json(
+      { message: "Failed to fetch problems" },
+      { status: 500 }
+    );
+  }
+}

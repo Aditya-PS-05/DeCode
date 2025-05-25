@@ -1,6 +1,6 @@
 
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,45 +10,53 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { CustomSession } from '@/app/api/auth/[...nextauth]/options';
+import { JsonArray } from '@prisma/client/runtime/library';
 
-const ProblemSolver = ({user, id}: {user: CustomSession['user'] | null; id: string}) => {
-//   const { id } = useParams();
+interface Example {
+  input: string;
+  output: string;
+  explanation?: string;
+}
+
+interface Problem {
+  id: number;
+  title: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  tags: string[];
+  description: string;
+  acceptance?: string;
+  solved?: boolean;
+  constraints: string[];
+  examples: Example[]; // updated key to match model
+}
+
+const ProblemSolver = ({ user, id }: { user: CustomSession['user'] | null; id: string }) => {
+  //   const { id } = useParams();
   const [selectedLanguage, setSelectedLanguage] = useState('javascript');
   const [code, setCode] = useState('// Write your solution here\nfunction twoSum(nums, target) {\n    \n}');
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const { toast } = useToast();
+  const [problem, setProblem] = useState<Problem>();
+  const [error, setError] = useState<any>();
+  const [loading, setLoading] = useState<boolean>();
 
-  // Mock problem data
-  const problem = {
-    id: id,
-    title: 'Two Sum',
-    difficulty: 'Easy',
-    tags: ['Array', 'Hash Table'],
-    description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-
-You may assume that each input would have exactly one solution, and you may not use the same element twice.
-
-You can return the answer in any order.`,
-    examples: [
-      {
-        input: 'nums = [2,7,11,15], target = 9',
-        output: '[0,1]',
-        explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].'
-      },
-      {
-        input: 'nums = [3,2,4], target = 6',
-        output: '[1,2]',
-        explanation: 'Because nums[1] + nums[2] == 6, we return [1, 2].'
+  useEffect(() => {
+    const fetchProblem = async () => {
+      try {
+        const res = await fetch(`/api/problems/1`);
+        if (!res.ok) throw new Error('Problem not found');
+        const data = await res.json();
+        setProblem(data.problem);
+      } catch (err: any) {
+        setError(err.message || 'Failed to fetch problem');
+      } finally {
+        setLoading(false);
       }
-    ],
-    constraints: [
-      '2 ≤ nums.length ≤ 10⁴',
-      '-10⁹ ≤ nums[i] ≤ 10⁹',
-      '-10⁹ ≤ target ≤ 10⁹',
-      'Only one valid answer exists.'
-    ]
-  };
+    };
+
+    fetchProblem();
+  }, [id]);
 
   const languages = [
     { value: 'javascript', label: 'JavaScript' },
@@ -74,7 +82,7 @@ You can return the answer in any order.`,
   const handleRun = async () => {
     setIsRunning(true);
     setOutput('Running...');
-    
+
     // Simulate code execution
     setTimeout(() => {
       setOutput(`Test case 1: PASSED
@@ -94,7 +102,7 @@ All test cases passed! ✅`);
 
   const handleSubmit = async () => {
     setIsRunning(true);
-    
+
     // Simulate submission
     setTimeout(() => {
       toast({
@@ -107,11 +115,10 @@ All test cases passed! ✅`);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar user={user!}/>
-      
+      <Navbar user={user!} />
+
       <div className="h-[calc(100vh-4rem)] flex">
-        {/* Problem Description Panel */}
-        <div className="w-1/2 border-r bg-white overflow-y-auto">
+        {problem ? <div className="w-1/2 border-r bg-white overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <h1 className="text-2xl font-bold text-gray-900">{problem.title}</h1>
@@ -165,7 +172,10 @@ All test cases passed! ✅`);
               </div>
             </div>
           </div>
-        </div>
+        </div> : (
+          <div className="p-6">Loading...</div>
+        )
+        }
 
         {/* Code Editor Panel */}
         <div className="w-1/2 flex flex-col bg-white">

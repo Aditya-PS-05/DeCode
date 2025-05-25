@@ -1,3 +1,4 @@
+// /problems/:id page
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import ProblemSolver from '@/components/ProblemPage';
