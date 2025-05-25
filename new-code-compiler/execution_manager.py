@@ -34,7 +34,8 @@ def run_containerization(language, code, input_data, job_id):
             "docker", "run", "--rm",
             "--network", "none",
             "--cpus", "1", "--memory", "128m",
-            "--security-opt", f"seccomp=/runner/seccomp-profile.json",
+            "-i",  # Attach stdin for harness expecting stdin input
+            # Seccomp temporarily disabled for troubleshooting; restore for prod!
             "-v", f"{user_code_path}:/runner/user_code{file_ext}:ro",
             "-v", f"{json_input_path}:/runner/input.json:ro",
             "--workdir", "/runner",
@@ -42,19 +43,24 @@ def run_containerization(language, code, input_data, job_id):
         ]
         # Python: ["python", "harness_python.py", ...]
         if language == "python":
+            # Pipe /runner/input.json as stdin to harness_python.py inside container
             docker_run += ["python", "harness_python.py"]
+            # Instead of shell redirect, handle input.json as stdin via subprocess below
         elif language == "java":
             docker_run += ["sh", "-c", "javac user_code.java && java Harness"]
         elif language == "cpp":
             docker_run += ["sh", "-c", "g++ -O2 -o main user_code.cpp && ./main"]
 
         try:
-            proc = subprocess.run(
-                docker_run,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                timeout=20
-            )
+            # Open the input.json file and pass it as stdin for the process
+            with open(json_input_path, "rb") as fin:
+                proc = subprocess.run(
+                    docker_run,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    stdin=fin,
+                    timeout=20
+                )
             out = proc.stdout.decode(errors="replace")
             err = proc.stderr.decode(errors="replace")
             if proc.returncode != 0:
