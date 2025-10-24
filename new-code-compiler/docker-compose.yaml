@@ -44,8 +44,8 @@ services:
 
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    # Removed port mapping to avoid conflict with host Redis
+    # Containers can still access Redis internally via redis:6379
     command: ["redis-server", "--save", ""]
 
 networks:

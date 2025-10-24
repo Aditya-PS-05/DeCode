@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8080:8080"
+    environment:
+      - QUEUE_URL=${QUEUE_URL:-redis://redis:6379/0}
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/languages"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  worker-python:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    environment:
+      - QUEUE_URL=${QUEUE_URL:-redis://redis:6379/0}
+      - LANGUAGE=python
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+  worker-java:
+    build:
+      context: .
+      dockerfile: Dockerfile.java
+    environment:
+      - QUEUE_URL=${QUEUE_URL:-redis://redis:6379/0}
+      - LANGUAGE=java
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+  worker-cpp:
+    build:
+      context: .
+      dockerfile: Dockerfile.cpp
+    environment:
+      - QUEUE_URL=${QUEUE_URL:-redis://redis:6379/0}
+      - LANGUAGE=cpp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  redis-data:
+
+networks:
+  default:
+    name: code-compiler-network
