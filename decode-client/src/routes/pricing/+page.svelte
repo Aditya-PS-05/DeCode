@@ -123,47 +123,47 @@
 			</div>
 
 			<!-- Pro Cohort Card (Featured) -->
-			<div class="rounded-3xl bg-gradient-to-b from-purple-700 to-purple-900 p-8 shadow-2xl shadow-purple-500/20 backdrop-blur-xl">
-				<h3 class="mb-6 text-2xl font-bold text-white">Pro Cohort</h3>
-				<div class="mb-8 flex items-baseline gap-3">
-					<span class="text-sm text-purple-300 line-through">$1200</span>
-					<span class="text-4xl font-bold text-white">$899</span>
+			<div class="rounded-3xl p-10 shadow-2xl shadow-purple-500/30" style="background: linear-gradient(180deg, #4C1D95 0%, #2E1065 100%);">
+				<h3 class="mb-8 text-3xl font-bold text-white">Pro Cohort</h3>
+				<div class="mb-10 flex items-baseline gap-3">
+					<span class="text-base text-purple-300/60 line-through">$1200</span>
+					<span class="text-5xl font-bold text-white">$899</span>
 				</div>
 
 				<!-- Features List -->
-				<ul class="mb-10 space-y-4">
-					<li class="flex items-start gap-3 text-sm text-white">
-						<svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+				<ul class="mb-12 space-y-5">
+					<li class="flex items-center gap-4 text-base text-white">
+						<svg class="h-6 w-6 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
 							<path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
 						</svg>
 						Full curriculum via weekly live sessions
 					</li>
-					<li class="flex items-start gap-3 text-sm text-white">
-						<svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+					<li class="flex items-center gap-4 text-base text-white">
+						<svg class="h-6 w-6 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
 							<path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
 						</svg>
 						Weekly deep-dive sessions
 					</li>
-					<li class="flex items-start gap-3 text-sm text-white">
-						<svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+					<li class="flex items-center gap-4 text-base text-white">
+						<svg class="h-6 w-6 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
 							<path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
 						</svg>
 						Private community + peer discussions
 					</li>
-					<li class="flex items-start gap-3 text-sm text-white">
-						<svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+					<li class="flex items-center gap-4 text-base text-white">
+						<svg class="h-6 w-6 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
 							<path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
 						</svg>
 						Weekly AMA + guidance
 					</li>
-					<li class="flex items-start gap-3 text-sm text-purple-300">
-						<svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<li class="flex items-center gap-4 text-base text-red-400">
+						<svg class="h-6 w-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
 						</svg>
 						Not included
 					</li>
-					<li class="flex items-start gap-3 text-sm text-white">
-						<svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+					<li class="flex items-center gap-4 text-base text-white">
+						<svg class="h-6 w-6 flex-shrink-0 text-green-400" fill="currentColor" viewBox="0 0 20 20">
 							<path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
 						</svg>
 						certificate
@@ -171,7 +171,7 @@
 				</ul>
 
 				<button
-					class="w-full rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3.5 text-sm font-medium text-white transition hover:from-purple-600 hover:to-pink-600"
+					class="w-full rounded-2xl bg-gradient-to-r from-purple-500 via-purple-600 to-fuchsia-600 px-6 py-4 text-base font-semibold text-white transition hover:from-purple-600 hover:via-purple-700 hover:to-fuchsia-700"
 				>
 					Experience a Free Session
 				</button>
