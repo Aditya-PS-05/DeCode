@@ -1,22 +1,20 @@
-use std::{io};
+use serde::{Deserialize, Serialize};
 
-use actix_web::{get, web, App, HttpServer, Responder};
-
-#[get("/")]
-async fn index() -> impl Responder {
-    return "Hello World";
+#[derive(Clone)]
+pub struct User {
+    pub uid: String,
+    pub email: String,
+    pub pw: String,
+    pub role: String,
 }
 
-#[get("/{name}")]
-async fn hello(name: web::Path<String>) -> impl Responder {
-    format!("Hello {}!", name)
+#[derive(Deserialize)]
+pub struct LoginRequest {
+    pub email: String,
+    pub pw: String,
 }
 
-#[actix_web::main]
-async fn main() -> io::Result<()> {
-    HttpServer::new(|| App::new().service(index).service(hello))
-        .bind(("127.0.0.1", 8000))?
-        .run()
-        .await
-
+pub struct LoginResponse {
+    pub token: String,
 }
+fn main() {}
