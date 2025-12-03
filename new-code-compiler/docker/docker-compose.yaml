@@ -55,6 +55,20 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ../tmp:/workspace/tmp:rw
 
+  worker-rust:
+    image: new-code-compiler_worker-rust:latest
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/Dockerfile.rust
+    environment:
+      - QUEUE_URL=redis://redis:6379/0
+      - LANGUAGE=rust
+      - TMPDIR=/workspace/tmp
+      - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../tmp:/workspace/tmp:rw
+
   redis:
     image: redis:7-alpine
     ports:
