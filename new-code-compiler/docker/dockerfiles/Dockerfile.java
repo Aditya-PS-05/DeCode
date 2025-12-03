@@ -15,11 +15,12 @@ RUN apt-get update && \
     pip3 install --no-cache-dir redis && \
     rm -rf /var/lib/apt/lists/*
 
-COPY test_harnesses/harness_java.java /runner/harness_java.java
-COPY static_analysis.py /runner/static_analysis.py
-COPY execution_manager.py /runner/execution_manager.py
-COPY jobqueue.py /runner/jobqueue.py
-COPY seccomp-profile.json /runner/seccomp-profile.json
+COPY src/test_harnesses/harness_java.java /runner/harness_java.java
+COPY src/worker/static_analysis.py /runner/static_analysis.py
+COPY src/worker/execution_manager.py /runner/execution_manager.py
+COPY src/worker/jobqueue.py /runner/jobqueue.py
+COPY docker/seccomp-profile.json /runner/seccomp-profile.json
+COPY src/worker/main.py /runner/main.py
 
 RUN useradd --no-create-home --shell /usr/sbin/nologin runneruser
 
@@ -27,4 +28,4 @@ RUN useradd --no-create-home --shell /usr/sbin/nologin runneruser
 
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAM=128m"
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["python3", "/runner/execution_manager.py"]
+CMD ["python3", "/runner/main.py"]

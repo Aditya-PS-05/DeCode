@@ -15,12 +15,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends docker-ce-cli && \
     rm -rf /var/lib/apt/lists/*
 
-COPY test_harnesses/harness_python.py /runner/harness_python.py
-COPY static_analysis.py /runner/static_analysis.py
-COPY execution_manager.py /runner/execution_manager.py
-COPY jobqueue.py /runner/jobqueue.py
-COPY seccomp-profile.json /runner/seccomp-profile.json
-COPY main.py /runner/main.py
+COPY src/test_harnesses/harness_python.py /runner/harness_python.py
+COPY src/worker/static_analysis.py /runner/static_analysis.py
+COPY src/worker/execution_manager.py /runner/execution_manager.py
+COPY src/worker/jobqueue.py /runner/jobqueue.py
+COPY docker/seccomp-profile.json /runner/seccomp-profile.json
+COPY src/worker/main.py /runner/main.py
 
 # Install Python packages needed for jobqueue.py (redis client)
 RUN pip install --no-cache-dir redis

@@ -2,9 +2,10 @@ version: '3.8'
 
 services:
   api-gateway:
+    image: new-code-compiler_api-gateway:latest
     build:
-      context: .
-      dockerfile: Dockerfile.api
+      context: ..
+      dockerfile: docker/dockerfiles/Dockerfile.api
     ports:
       - "8080:8080"
     environment:
@@ -13,9 +14,10 @@ services:
       - redis
 
   worker-python:
+    image: new-code-compiler_worker-python:latest
     build:
-      context: .
-      dockerfile: Dockerfile.python
+      context: ..
+      dockerfile: docker/dockerfiles/Dockerfile.python
     environment:
       - QUEUE_URL=redis://redis:6379/0
       - LANGUAGE=python
@@ -23,12 +25,13 @@ services:
       - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./tmp:/workspace/tmp:rw
+      - ../tmp:/workspace/tmp:rw
 
   worker-java:
+    image: new-code-compiler_worker-java:latest
     build:
-      context: .
-      dockerfile: Dockerfile.java
+      context: ..
+      dockerfile: docker/dockerfiles/Dockerfile.java
     environment:
       - QUEUE_URL=redis://redis:6379/0
       - LANGUAGE=java
@@ -36,12 +39,13 @@ services:
       - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./tmp:/workspace/tmp:rw
+      - ../tmp:/workspace/tmp:rw
 
   worker-cpp:
+    image: new-code-compiler_worker-cpp:latest
     build:
-      context: .
-      dockerfile: Dockerfile.cpp
+      context: ..
+      dockerfile: docker/dockerfiles/Dockerfile.cpp
     environment:
       - QUEUE_URL=redis://redis:6379/0
       - LANGUAGE=cpp
@@ -49,7 +53,7 @@ services:
       - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./tmp:/workspace/tmp:rw
+      - ../tmp:/workspace/tmp:rw
 
   redis:
     image: redis:7-alpine

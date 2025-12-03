@@ -12,14 +12,14 @@ RUN apt-get update && \
 # Upgrade pip/setuptools before requirements (helps fix cryptography/SSL bugs)
 RUN pip install --no-cache-dir --upgrade pip setuptools
 
-COPY api_gateway.py .
-COPY jobqueue.py .
-COPY static_analysis.py .
-COPY execution_manager.py .
-COPY result_storage.py .
+COPY src/api/api_gateway.py .
+COPY src/worker/jobqueue.py .
+COPY src/worker/static_analysis.py .
+COPY src/worker/execution_manager.py .
+COPY src/api/result_storage.py .
 
 # requirements.txt for API server
-COPY api-requirements.txt ./requirements.txt
+COPY config/api-requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
 
 EXPOSE 8080

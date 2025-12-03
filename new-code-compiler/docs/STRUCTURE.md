@@ -25,3 +25,30 @@ new-code-compiler/
 - All sensitive code-execution happens in per-job Docker containers with seccomp and temporary file systems.
 - API Gateway exposes `/submit`, `/result/<job_id>`, and `/languages` endpoints (OpenAPI/Swagger documented if FastAPI).
 - Includes secured and extensible static code analysis, harness injection, containerized worker demo per language.
+
+======================================================
+
+1. Python Example:
+  {
+    "language": "python",
+    "code": "def add(a, b):\n    return a + b\n\nresult = add(5, 3)\nprint(f'Result: {result}')",
+    "input": {}
+  }
+
+  2. C++ Example:
+  {"language": "cpp","code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10, b = 20;\n    int sum = a + b;\n    cout << \"Sum: \" << sum << endl;\n    return 0;\n}","input": {}}
+
+  3. Java Example:
+  {"language": "java", "code": "public class Main {\n    public static void main(String[] args) {\n        int a = 15;\n        int b = 25;\n        int sum = a + b;\n  System.out.println(\"Sum: \" + sum);\n    }\n}","input": {}}
+
+
+======================= Commands =====================
+======================================================
+
+
+export QUEUE_URL=redis://localhost:6380/0 && uv run main.py
+
+
+docker-compose up -d
+
+docker network rm code-compiler-network

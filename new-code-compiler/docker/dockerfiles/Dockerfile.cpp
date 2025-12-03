@@ -14,11 +14,12 @@ RUN apt-get update && \
     pip3 install --no-cache-dir redis && \
     rm -rf /var/lib/apt/lists/*
 
-COPY test_harnesses/harness_cpp.cpp /runner/harness_cpp.cpp
-COPY static_analysis.py /runner/static_analysis.py
-COPY execution_manager.py /runner/execution_manager.py
-COPY jobqueue.py /runner/jobqueue.py
-COPY seccomp-profile.json /runner/seccomp-profile.json
+COPY src/test_harnesses/harness_cpp.cpp /runner/harness_cpp.cpp
+COPY src/worker/static_analysis.py /runner/static_analysis.py
+COPY src/worker/execution_manager.py /runner/execution_manager.py
+COPY src/worker/jobqueue.py /runner/jobqueue.py
+COPY docker/seccomp-profile.json /runner/seccomp-profile.json
+COPY src/worker/main.py /runner/main.py
 
 RUN useradd --no-create-home --shell /usr/sbin/nologin runneruser
 
@@ -26,4 +27,4 @@ RUN useradd --no-create-home --shell /usr/sbin/nologin runneruser
 
 ENV EXEC_MEMORY_MB=128
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["python3", "/runner/execution_manager.py"]
+CMD ["python3", "/runner/main.py"]
