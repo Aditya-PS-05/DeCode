@@ -44,6 +44,20 @@ new-code-compiler/
   4. Rust Example:
   {"language": "rust","code": "fn fibonacci(n: u32) -> u32 {\n    match n {\n        0 => 0,\n        1 => 1,\n        _ => fibonacci(n - 1) + fibonacci(n - 2)\n    }\n}\n\nfn main() {\n    for i in 0..10 {\n        println!(\"fib({}) = {}\", i, fibonacci(i));\n    }\n}","input": {}}
 
+  5. Javascript Example:
+  {
+    "language": "javascript",
+    "code": "console.log('Hello from JavaScript!');",
+    "input": {}
+  }
+
+  {
+    "language": "javascript",
+    "code": "async function delay(ms) {\n    return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function main() {\n    
+  console.log('Start');\n    await delay(100);\n    console.log('After 100ms');\n    const result = [1, 2, 3].map(x => x * x);\n    
+  console.log('Squares:', result);\n}\n\nmain();",
+    "input": {}
+  }
 ======================= Commands =====================
 ======================================================
 
