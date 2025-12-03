@@ -6,12 +6,12 @@ from jobqueue import queue as code_queue
 import uuid
 
 app = FastAPI(
-    title="LeetCode-Style Code Runner",
-    description="Secure containerized code runner for Python, Java, C++",
+    title="De-Code",
+    description="Secure containerized code runner for Python, Java, C++, Rust",
     version="1.0.0"
 )
 
-LANGUAGES = ["python", "java", "cpp"]
+LANGUAGES = ["python", "java", "cpp", "rust"]
 
 class SubmitRequest(BaseModel):
     language: str

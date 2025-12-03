@@ -41,6 +41,8 @@ new-code-compiler/
   3. Java Example:
   {"language": "java", "code": "public class Main {\n    public static void main(String[] args) {\n        int a = 15;\n        int b = 25;\n        int sum = a + b;\n  System.out.println(\"Sum: \" + sum);\n    }\n}","input": {}}
 
+  4. Rust Example:
+  {"language": "rust","code": "fn fibonacci(n: u32) -> u32 {\n    match n {\n        0 => 0,\n        1 => 1,\n        _ => fibonacci(n - 1) + fibonacci(n - 2)\n    }\n}\n\nfn main() {\n    for i in 0..10 {\n        println!(\"fib({}) = {}\", i, fibonacci(i));\n    }\n}","input": {}}
 
 ======================= Commands =====================
 ======================================================
@@ -51,4 +53,8 @@ export QUEUE_URL=redis://localhost:6380/0 && uv run main.py
 
 docker-compose up -d
 
+docker-compose build
+
 docker network rm code-compiler-network
+
+docker compose up

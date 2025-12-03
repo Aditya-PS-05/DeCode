@@ -7,7 +7,7 @@ import sys
 
 from static_analysis import static_code_scan
 
-LANG_MAP = {"python": ".py", "java": ".java", "cpp": ".cpp"}
+LANG_MAP = {"python": ".py", "java": ".java", "cpp": ".cpp", "rust": ".rs"}
 
 def run_containerization(language, code, input_data, job_id):
     """
@@ -84,6 +84,8 @@ def run_containerization(language, code, input_data, job_id):
             docker_run += ["sh", "-c", f"javac {filename} && java {class_name}"]
         elif language == "cpp":
             docker_run += ["sh", "-c", f"g++ -O2 -o main {filename} && ./main"]
+        elif language == "rust":
+            docker_run += ["sh", "-c", f"rustc -O {filename} -o main && ./main"]
 
         try:
             # Open the input.json file and pass it as stdin for the process
