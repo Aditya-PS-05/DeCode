@@ -11,7 +11,16 @@ LANG_MAP = {"python": ".py", "java": ".java", "cpp": ".cpp", "rust": ".rs"}
 
 def run_containerization(language, code, input_data, job_id):
     """
-    Launches language-specific code in a secure temporary containerized environment.
+    Run the provided source code inside a language-specific, temporary containerized environment.
+    
+    Parameters:
+    	language (str): Language name key (e.g., "python", "java", "cpp", "rust") used to select file extension and runtime.
+    	code (str): Source code to write into the temporary workspace and execute.
+    	input_data (Any): Arbitrary input payload that will be written to input.json and fed to the execution harness as stdin.
+    	job_id (str): Identifier for the job; used for logging and temporary file correlation (not returned).
+    
+    Returns:
+    	result (dict): Execution outcome. On success returns either a decoded JSON object from stdout or {"output": "<stdout>"}; if there is no output returns {"output": "No output."}; on failure returns {"error": "<error message>"}.
     """
     file_ext = LANG_MAP.get(language)
     if not file_ext:
