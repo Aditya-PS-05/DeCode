@@ -1,0 +1,24 @@
+{
+  "defaultAction": "SCMP_ACT_ERRNO",
+  "archMap": [
+    {
+      "architecture": "SCMP_ARCH_X86_64",
+      "subArchitectures": []
+    }
+  ],
+  "syscalls": [
+    { "names": [
+        "read","write","exit","rt_sigreturn","fstat","mmap","mprotect","munmap","brk","access","arch_prctl","close","readlink","clock_gettime","nanosleep","getpid",
+        "lseek","prlimit64","sigaltstack","sigprocmask","open","openat","stat","fstat","lstat","newfstatat","getdents64","ioctl","madvise","getcwd","getpid","getppid",
+        "set_tid_address","set_robust_list","getrandom","fcntl","dup","dup2","dup3","pipe","pipe2",
+        "eventfd2","select","pselect6","epoll_create1","epoll_ctl","epoll_wait","poll","ppoll",
+        "sendfile","sendfile64","pread64","pwrite64","splice","tee","vmsplice","utimensat",
+        "statx","shmget","shmat","shmdt","shmctl",
+        "rt_sigaction","rt_sigprocmask","rt_sigpending","rt_sigtimedwait","rt_sigqueueinfo","rt_sigsuspend",
+        "gettimeofday","futex","sched_yield","wait4","waitid",
+        "uname","getrlimit",
+        "mremap","munlock","mlock","mlockall","munlockall","nice","times","uname","getuid","geteuid","getgid","getegid",
+        "execve","clone","vfork","fork","prctl"
+      ], "action": "SCMP_ACT_ALLOW" }
+  ]
+}
