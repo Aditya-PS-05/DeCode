@@ -69,6 +69,20 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ../tmp:/workspace/tmp:rw
 
+  worker-javascript:
+    image: new-code-compiler_worker-javascript:latest
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/Dockerfile.javascript
+    environment:
+      - QUEUE_URL=redis://redis:6379/0
+      - LANGUAGE=javascript
+      - TMPDIR=/workspace/tmp
+      - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../tmp:/workspace/tmp:rw
+
   redis:
     image: redis:7-alpine
     ports:

@@ -7,11 +7,11 @@ import uuid
 
 app = FastAPI(
     title="De-Code",
-    description="Secure containerized code runner for Python, Java, C++, Rust",
+    description="Secure containerized code runner for Python, Java, C++, Rust, JavaScript",
     version="1.0.0"
 )
 
-LANGUAGES = ["python", "java", "cpp", "rust"]
+LANGUAGES = ["python", "java", "cpp", "rust", "javascript"]
 
 class SubmitRequest(BaseModel):
     language: str
