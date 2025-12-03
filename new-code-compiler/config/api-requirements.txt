@@ -1,5 +1,0 @@
-fastapi
-uvicorn[standard]
-redis>=4.0.0
-pydantic>=2.0.0
-aiofiles
