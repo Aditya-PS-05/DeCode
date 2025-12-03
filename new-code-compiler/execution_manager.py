@@ -16,19 +16,52 @@ def run_containerization(language, code, input_data, job_id):
     file_ext = LANG_MAP.get(language)
     if not file_ext:
         return {"error": "Unsupported language"}
-    with tempfile.TemporaryDirectory() as tmpd:
+
+    # Use TMPDIR if set (for Docker-in-Docker scenarios), otherwise use default
+    tmpdir_base = os.environ.get('TMPDIR', tempfile.gettempdir())
+
+    with tempfile.TemporaryDirectory(dir=tmpdir_base) as tmpd:
+        # For Java, extract the public class name to use as filename
+        class_name = None
+        if language == "java":
+            import re
+            match = re.search(r'public\s+class\s+(\w+)', code)
+            if match:
+                class_name = match.group(1)
+                filename = f"{class_name}.java"
+            else:
+                # No public class, use default name
+                class_name = "Main"
+                filename = "Main.java"
+        else:
+            filename = f"user_code{file_ext}"
+
         # Prepare user code file path
-        user_code_path = os.path.join(tmpd, f"user_code{file_ext}")
+        user_code_path = os.path.join(tmpd, filename)
         with open(user_code_path, "w") as f:
             f.write(code)
-        
+
         # Harness path (already in image at /runner)
         harness_name = f"harness_{language}{file_ext}"
         # Prepare input.json
         json_input_path = os.path.join(tmpd, "input.json")
         with open(json_input_path, "w") as f:
             json.dump({"input": input_data, "code": code}, f)
-        
+
+        # For Docker-in-Docker: convert container paths to host paths
+        # If TMPDIR is set, it means we're in a container with a mounted volume
+        # The host can access these files via the same mounted path structure
+        tmpdir_env = os.environ.get('TMPDIR')
+        host_tmp_path = os.environ.get('HOST_TMP_PATH')
+
+        if tmpdir_env and host_tmp_path:
+            # Convert container paths to host paths
+            host_user_code_path = user_code_path.replace(tmpdir_env, host_tmp_path)
+            host_json_input_path = json_input_path.replace(tmpdir_env, host_tmp_path)
+        else:
+            host_user_code_path = user_code_path
+            host_json_input_path = json_input_path
+
         # Security: Use restrictive seccomp, drop all capabilities, read-only root, short resource budget
         docker_run = [
             "docker", "run", "--rm",
@@ -36,8 +69,8 @@ def run_containerization(language, code, input_data, job_id):
             "--cpus", "1", "--memory", "128m",
             "-i",  # Attach stdin for harness expecting stdin input
             # Seccomp temporarily disabled for troubleshooting; restore for prod!
-            "-v", f"{user_code_path}:/runner/user_code{file_ext}:ro",
-            "-v", f"{json_input_path}:/runner/input.json:ro",
+            "-v", f"{host_user_code_path}:/runner/{filename}:ro",
+            "-v", f"{host_json_input_path}:/runner/input.json:ro",
             "--workdir", "/runner",
             f"new-code-compiler_worker-{language}:latest",  # match docker-compose image name
         ]
@@ -47,9 +80,10 @@ def run_containerization(language, code, input_data, job_id):
             docker_run += ["python", "harness_python.py"]
             # Instead of shell redirect, handle input.json as stdin via subprocess below
         elif language == "java":
-            docker_run += ["sh", "-c", "javac user_code.java && java Harness"]
+            # Use the class_name extracted earlier
+            docker_run += ["sh", "-c", f"javac {filename} && java {class_name}"]
         elif language == "cpp":
-            docker_run += ["sh", "-c", "g++ -O2 -o main user_code.cpp && ./main"]
+            docker_run += ["sh", "-c", f"g++ -O2 -o main {filename} && ./main"]
 
         try:
             # Open the input.json file and pass it as stdin for the process

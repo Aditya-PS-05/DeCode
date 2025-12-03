@@ -19,8 +19,11 @@ services:
     environment:
       - QUEUE_URL=redis://redis:6379/0
       - LANGUAGE=python
+      - TMPDIR=/workspace/tmp
+      - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./tmp:/workspace/tmp:rw
 
   worker-java:
     build:
@@ -29,8 +32,11 @@ services:
     environment:
       - QUEUE_URL=redis://redis:6379/0
       - LANGUAGE=java
+      - TMPDIR=/workspace/tmp
+      - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./tmp:/workspace/tmp:rw
 
   worker-cpp:
     build:
@@ -39,13 +45,16 @@ services:
     environment:
       - QUEUE_URL=redis://redis:6379/0
       - LANGUAGE=cpp
+      - TMPDIR=/workspace/tmp
+      - HOST_TMP_PATH=/home/aditya/my-work/De-Code/new-code-compiler/tmp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./tmp:/workspace/tmp:rw
 
   redis:
     image: redis:7-alpine
-    # Removed port mapping to avoid conflict with host Redis
-    # Containers can still access Redis internally via redis:6379
+    ports:
+      - "6380:6379"
     command: ["redis-server", "--save", ""]
 
 networks:
